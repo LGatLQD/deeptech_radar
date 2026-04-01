@@ -1,0 +1,2 @@
+ALTER TABLE enrichment_results
+ADD COLUMN IF NOT EXISTS alignment_score NUMERIC NOT NULL DEFAULT 0;

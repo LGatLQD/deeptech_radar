@@ -1,0 +1,95 @@
+Trading Name,Legal / Companies House Name,CH Number,Domain,Sub-Domain,Source (UKI=Innovate UK Grant | UNI=University Spinout | PAT=Patent | PRO=Gov Procurement | DBT=DBT Lookbook),Source: UKRI/Innovate UK Grant,Source: University Spinout,Source: Patent (IPO/EPO/WIPO),Source: Gov Procurement,Source: DBT Lookbook,University Origin,Year,Grant / Investment,Description,Notes
+MatchBio,MATCHBIO LIMITED,,Biotech / Life Sciences,Cancer Immunotherapy / T-Cell Matching,UNI,,Yes,,,,University of Oxford,2024,£4.5m seed,Pioneers advancements in immunotherapy to fight cancer; launched Jan 2024,Oxford University Innovation spinout; deep immunology IP
+CuspAI,CUSPAI LIMITED,,AI,AI for Materials Discovery,UNI,,Yes,,,,University of Cambridge,2023,,Foundation models for materials science; accelerating clean-energy materials discovery,Cambridge Enterprise portfolio company
+SiftrBio,SIFTRBIO LIMITED,,Biotech / Life Sciences,Antibody-Drug Conjugates (ADCs),UNI,,Yes,,,,Imperial College London,2023,,Improves ADC performance for precision oncology; Prof Ed Tate lab,Imperial College London spinout 2023
+SOLVE Chemistry,SOLVE CHEMISTRY LIMITED,,AI,AI for Sustainable Chemical Manufacturing,UNI,,Yes,,,,Imperial College London,2023,,AI to optimise sustainable synthesis routes and manufacturing; pre-seed from BASF,Imperial College spinout 2023; BASF pre-seed funding
+Concinnity Genetics,CONCINNITY GENETICS LTD,SC786187,Biotech / Life Sciences,Gene Control Platform / Synthetic Biology,UNI,,Yes,,,,University of Edinburgh,2023,£3m,Novel gene control platform; launched 2023 with £3m funding,Edinburgh Innovations spinout 2023
+Oriole Networks,ORIOLE NETWORKS LTD,14802813,AI / Clean Tech,Energy-Efficient Data Centre Networking,UNI,,Yes,,,,University College London,2023,£27.5m raised,Technology to make data centres more energy efficient; £27.5m raised across two rounds,UCL Business spinout 2023; strong commercial traction
+PhovIR,PHOVIR TECHNOLOGIES LIMITED,14756844,AI / Sensors,Near-Infrared Optical Sensing,UNI; PAT,,Yes,Yes,,,University of Manchester,2023,£4m seed,"NIR optical sensors detecting optical fingerprints of solids, liquids, gases in portable device",Northern Gritstone £4m seed round; NG Studios graduate; Dr Tim Echtermeyer & Dr Steve Turley
+Haliogen Power,HALIOGEN POWER LIMITED,,Clean Energy,Next-Generation Power Generation,UNI,,Yes,,,,University of Manchester,2023,,Novel power generation technology from Manchester Engineering research,University of Manchester Innovation Factory spinout 2022/23
+Plant Organelle Technologies,PLANT ORGANELLE TECHNOLOGIES LIMITED,,Biotech / AgriTech,Plant Synthetic Biology / Organelle Engineering,UNI,,Yes,,,,University of Manchester,2023,,Engineering plant organelles for enhanced crop yields and bio-production,University of Manchester Innovation Factory spinout 2022/23
+Oncodrug,ONCODRUG LIMITED,,Biotech / Life Sciences,Oncology Drug Discovery,UNI,,Yes,,,,University of Manchester,2023,,Novel oncology drug discovery using Manchester cancer research,University of Manchester Innovation Factory spinout 2022/23
+CASA Space Technologies,CASA SPACE TECHNOLOGIES LIMITED,,Space Tech,Space Technology,UNI,,Yes,,,,University of Manchester,2023,,Space technology spinout from University of Manchester research,University of Manchester Innovation Factory spinout 2022/23
+OpenCMC,OPENCMC LIMITED,,Biotech / Life Sciences,Digital Medicines Manufacturing,UNI,,Yes,,,,University of Strathclyde (CMAC),2023,,Accelerating industrial adoption of advanced chemistry manufacturing and control (CMC) technologies,Strathclyde spinout 2023; CMAC Future Manufacturing Hub; Innovate UK-funded centre
+AEGIQ,AEGIQ LIMITED,,Quantum / Photonics,Single-Photon Sources / Quantum Networking,UKI,Yes,,,,,University of Sheffield,2022,,Deterministic single-photon sources for photonic quantum computing and networking,UKRI NQCC £30m testbed programme 2024; Innovate UK Quantum Missions
+NK:IO,NK:IO LIMITED,,Biotech / Life Sciences,NK Cell Therapies for Solid Tumours,UKI; UNI,Yes,Yes,,,,Imperial College London,2022,£1.6m,NK cell therapies targeting solid tumours; Innovate UK New Cancer Therapeutics 2023,Imperial College spinout; Innovate UK New Cancer Therapeutics 2023
+Salience Labs,SALIENCE LABS LIMITED,,AI / Photonics,Photonic AI Compute,UNI; PAT,,Yes,Yes,,,University of Oxford / University of Münster,2022,,Photon-based AI compute solutions; joint Oxford/Münster spinout addressing AI energy demands,Oxford University Innovation spinout; patent-protected photonic interconnect technology
+Lumai,LUMAI LIMITED,,AI / Photonics,3D Optical AI Processors,UNI; PAT,,Yes,Yes,,,University of Oxford,2022,,Energy-efficient 3D optics + machine learning AI processors; addresses AI compute energy crisis,Oxford spinout; novel optical computing architecture
+NavLive,NAVLIVE LIMITED,,Robotics / Autonomy,Real-Time 3D Mapping / Multi-Sensor Fusion,UNI; PAT,,Yes,Yes,,,University of Oxford (Oxford Robotics Institute),2022,,"Advanced 3D mapping using real-time multi-sensor fusion (vision, LiDAR, etc.)",Oxford Robotics Institute spinout 2022; strong IP in SLAM and sensor fusion
+Seloxium,SELOXIUM LIMITED,14183419,Advanced Materials,Selective Flocculation for Critical Minerals,UNI; PAT,,Yes,Yes,,,University of Oxford,2022,,"Selective flocculation technology to transform mining, refining, and recycling of valuable metals",Oxford Engineering Science Dept spinout 2022
+Evoralis,EVORALIS LIMITED,,Advanced Materials / Biotech,Enzymatic Textile Recycling,UNI,,Yes,,,,University of Cambridge,2022,,Enzymatic solutions for textile recycling and sustainable materials processing,Cambridge Enterprise portfolio company
+Gastrobody Therapeutics,GASTROBODY THERAPEUTICS LIMITED,,Biotech / Life Sciences,Oral Biologics / GI Therapeutics,UNI,,Yes,,,,University of Cambridge,2022,,Orally delivered biologics for GI diseases; novel drug delivery platform,Cambridge Enterprise portfolio company
+illumion,ILLUMION LIMITED,,AI / Clean Energy,Optical Charge Photometry / Battery Materials,UNI,,Yes,,,,University of Cambridge,2022,,Optical tools using charge photometry to accelerate battery material development,Cambridge Enterprise portfolio company
+Biophonics,BIOPHONICS LIMITED,,AI / MedTech,Photoacoustic Imaging / Diagnostics,UNI,,Yes,,,,University of Cambridge,2022,,Photoacoustic imaging technology for non-invasive medical diagnostics,Cambridge Enterprise portfolio company
+M-Spin,M-SPIN LIMITED,,Clean Energy,Ultra-Porous Materials for Electrolysers / Fuel Cells,UNI; PAT,,Yes,Yes,,,Imperial College London,2022,,"Ultra-porous high surface area materials to revolutionise electrolysers, fuel cells and batteries",Imperial College spinout; Prof Nigel Brandon co-founder; patents on porous electrode structures
+MintNeuro,MINTNEURO LIMITED,,AI / MedTech,Active Implantable Brain-Computer Interfaces,UNI; PAT,,Yes,Yes,,,Imperial College London,2022,,Next-generation active implantable medical devices for the brain; co-founded by Tim Constandinou & Dorian Haci,Imperial College neurotechnology spinout; strong patent portfolio
+Trogenix,TROGENIX LIMITED,,Biotech / Life Sciences,Selective Brain Cancer Cell Killing,UNI,,Yes,,,,University of Edinburgh,2022,,Platform that selectively kills brain cancer cells without affecting healthy tissue,Edinburgh Innovations spinout; strong preclinical data
+Mycardium,MYCARDIUM LIMITED,,AI / MedTech,AI Cardiac Imaging Analysis,UNI,,Yes,,,,University College London,2022,,Superhuman AI for measuring cardiac function; clinically-led laboratory service,UCL Business spinout 2022
+CDotBio,CDOTBIO LIMITED,,Biotech / AgriTech,RNAi-Based AgriTech,UNI,,Yes,,,,University of Southampton,2022,,RNA interference (RNAi) technology for sustainable crop protection,SETsquared network; Investment Futures 2024 company
+Cavero Quantum,CAVERO QUANTUM LIMITED,13028884,Quantum,Post-Quantum Encryption / Secure Key Generation,UNI; PAT,,Yes,Yes,,,University of Leeds,2022,,Quantum encryption technology for secure key generation; post-quantum cryptography,Northern Gritstone NG Studios graduate; University of Leeds spinout 2022
+Literal Labs,LITERAL LABS LIMITED,,AI,Logic-Based / Explainable AI,UNI,,Yes,,,,University of Leeds,2022,,"Fast, efficient, explainable logic-based AI models for enterprise and defence",Northern Gritstone NG Studios spinout; University of Leeds origin
+ScreenIn3D,SCREENIN3D LIMITED,,Biotech / MedTech,Lab-on-a-Chip Cancer Therapy Screening,UNI,,Yes,,,,University of Strathclyde,2022,£750k seed,Microfluidic lab-on-a-chip for testing cancer therapies on patient-derived tumour samples,Strathclyde spinout; TRICAPITAL seed investment
+Lumino Technologies,LUMINO TECHNOLOGIES LIMITED,,Quantum / Photonics,Entangled Photon Sources,UKI,Yes,,,,,,2021,,Entangled photon source (QNET-EPS) for quantum networks,Innovate UK Quantum Missions Pilot winner
+Quantinuum,QUANTINUUM LTD,09109848,Quantum,Quantum Computing (Hardware + Software),UKI; PAT,Yes,,Yes,,,Cambridge Quantum (UK origin),2021,$300m raised,Formed 2021 from merger of Honeywell Quantum Solutions and Cambridge Quantum; Cambridge UK HQ,Major quantum computing company with UK operations; H-Series trapped-ion hardware
+Xairos UK Limited,XAIROS UK LIMITED,,Quantum,Quantum Timing Units,UKI,Yes,,,,,,2021,"£1,396,392",TimeLink quantum timing unit; resilient alternative to GPS-derived timing,"Innovate UK Contracts for Innovation: Quantum Sensors & PNT Missions, 2023"
+Monirail,MONIRAIL LIMITED,,Quantum,Quantum Inertial Navigation for Rail,UKI,Yes,,,,,,2021,"£1,263,818","Rail Quantum Inertial Navigation System (RQINS); consortium with Imperial College London, Univ of Sussex, TfL","Innovate UK Contracts for Innovation: Quantum Sensors & PNT Missions, 2023"
+Nascent Semiconductor Limited,NASCENT SEMICONDUCTOR LIMITED,,Quantum,Quantum Atomic Clocks,UKI,Yes,,,,,,2021,"£1,331,496",Q-ASSET: compact all-solid-state quantum clock for critical national infrastructure timing,"Innovate UK Contracts for Innovation: Quantum Sensors & PNT Missions, 2023"
+Siloton,SILOTON LIMITED,,Quantum / Photonics,Quantum Eye Scanning / OCT,UKI,Yes,,,,,,2021,"£703,858",Portable quantum eye scanner for NHS ophthalmology; aims to eliminate outpatient backlogs,"Innovate UK Contracts for Innovation: Quantum Sensors & PNT Missions, 2023"
+Delta g,DELTA-G LIMITED,,Quantum,Quantum Gravity Sensors,UNI; PAT,,Yes,Yes,,,University of Birmingham,2021,£6.10m equity raised,"Quantum gravimeters for subsurface sensing (utilities, construction, civil engineering)",Birmingham spinout; Science Creates / SETsquared network; strong patent portfolio
+Quantum Advanced Solutions,QUANTUM ADVANCED SOLUTIONS LTD,,Quantum / Photonics,Quantum Dot SWIR Sensors,UKI; UNI,Yes,Yes,,,,University of Cambridge,2021,,Advanced shortwave infrared (SWIR) sensors using quantum dot materials for defence and sensing,Cambridge collaboration; UKRI semiconductor programme funding
+NunaBio,NUNABIO LIMITED,,Biotech / Life Sciences,Microbiome / Biotech,UKI,Yes,,,,,,2021,,Life sciences biotech; part of Newcastle Biomedical Catalyst 2023 consortium,Innovate UK Biomedical Catalyst 2023 winner
+Hexis Lab,HEXIS LAB LIMITED,,Biotech / Life Sciences,Organ-on-Chip / Microfluidics,UKI,Yes,,,,,,2021,,Microfluidic organ-on-chip platforms for drug testing,Innovate UK Biomedical Catalyst 2023 winner; Newcastle-based
+Quantum Dice,QUANTUM DICE LIMITED,12579596,Quantum,Quantum Random Number Generation / Encryption,UNI; PAT,,Yes,Yes,,,University of Oxford,2021,,Source-device-independent quantum random number generator; uses light to create truly random encryption keys,Oxford Physics Dept spinout; strong IP/patent position
+Machine Discovery,MACHINE DISCOVERY LIMITED,,AI,Neural Networks for Numerical Simulations,UNI,,Yes,,,,University of Oxford,2021,,Faster and cheaper complex numerical simulations using proprietary neural networks,Oxford Department of Physics spinout
+Amber Therapeutics,AMBER THERAPEUTICS HOLDINGS LIMITED,13089338,Biotech / Life Sciences,Neuromodulation / Active Implantables,UNI,,Yes,,,,University of Oxford,2021,,Breakthrough neuromodulation therapies for chronic pain and nervous system disorders,Oxford University Innovation spinout 2021
+biomodal,BIOMODAL LIMITED,,Biotech / Life Sciences,Multimodal Epigenomics,UNI,,Yes,,,,University of Cambridge,2021,,duet technology for simultaneous detection of multiple epigenetic modifications from a single sample,Cambridge Enterprise portfolio; formerly named Cambridge Epigenetix
+OSSTEC,OSSTEC LIMITED,,MedTech / Advanced Materials,3D-Printed Cementless Orthopaedic Implants,UNI; PAT,,Yes,Yes,,,Imperial College London,2021,,3D-printed cementless partial knee replacements; over a decade of Imperial research,Imperial College spinout; London-based; CE marking pathway
+Net AI,NET AI LIMITED,,AI,AI for 5G Network Optimisation,UNI,,Yes,,,,University of Edinburgh,2021,,Cutting-edge AI for real-time analytics driving optimisation and automation of 5G mobile networks,Edinburgh Innovations spinout 2021
+Neuranics,NEURANICS LIMITED,,MedTech / Sensors,Magnetic Sensing / Human-Machine Interaction,UNI; PAT,,Yes,Yes,,,University of Edinburgh / University of Glasgow,2021,$8m,Magnetic sensing technology for next-generation human-machine interaction; $8m raised,Joint Edinburgh/Glasgow spinout; patents on magnetic sensor arrays
+Prothea Technologies,PROTHEA TECHNOLOGIES LIMITED,,AI / MedTech,AI-Guided Lung Cancer Diagnosis and Treatment,UNI,,Yes,,,,University of Edinburgh,2021,,See-and-treat technology for lung cancer diagnosis and treatment in one hospital visit; clinical trials,Edinburgh Innovations spinout; clinical trials underway 2024
+Resolution Therapeutics,RESOLUTION THERAPEUTICS LIMITED,,Biotech / Life Sciences,Cell Therapy for Liver Disease,UNI,,Yes,,,,University of Edinburgh,2021,,Macrophage cell therapy for end-stage liver disease; first-in-human patient dosed,Edinburgh Innovations spinout; clinical-stage; BBSRC-funded research origin
+Stanhope AI,STANHOPE AI LIMITED,,AI,AI / Machine Learning Applications,UNI,,Yes,,,,University College London,2021,,AI applications from UCL research; spun out 2021,UCL Computer Science Venturer Programme spinout 2021
+Scarlet Therapeutics,SCARLET THERAPEUTICS LIMITED,,MedTech,Medical Engineering / Targeted Therapeutics,UNI,,Yes,,,,University of Bristol,2021,,Targeted therapeutic delivery technology; Science Creates portfolio company,Bristol/Science Creates spinout
+CytoSeek,CYTOSEEK LIMITED,,Biotech / Life Sciences,Cell Therapy Targeting,UNI; PAT,,Yes,Yes,,,University of Bristol,2021,,Next-generation cell therapy targeting platform for cancer treatment,Bristol/Science Creates spinout; strong IP in cell targeting
+Kelpi,KELPI LIMITED,,Advanced Materials,Seaweed-Based Sustainable Packaging,UNI,,Yes,,,,University of Bristol,2021,,Biodegradable seaweed-derived coating to replace plastic packaging,Bristol/Science Creates spinout; SETsquared member
+Pictura Bio,PICTURA BIO LIMITED,,Biotech / Life Sciences,Rapid Infectious Disease Diagnostics,UNI,,Yes,,,,University of Bristol,2021,,Point-of-care rapid pathogen detection platform for scaling infectious disease diagnostics,Bristol/Science Creates spinout 2021
+Ferryx,FERRYX LIMITED,,Biotech / Life Sciences,Probiotic Gut Health Under Stress,UNI,,Yes,,,,University of Surrey,2021,,First probiotic designed to improve gut health during stress or active gut inflammation,SETsquared network; Investment Futures 2024 company
+Senisca,SENISCA LIMITED,,Biotech / Life Sciences,Senolytics / Healthy Ageing Biology,UNI,,Yes,,,,University of Exeter,2021,,Alternative splicing-based senolytics for age-related diseases; QantX portfolio,SETsquared/QantX portfolio company; University of Exeter spinout
+iFAST Diagnostics,IFAST DIAGNOSTICS LIMITED,,MedTech,Point-of-Care Diagnostics,UNI,,Yes,,,,University of Southampton,2021,,Fast and affordable point-of-care diagnostic technology,SETsquared/QantX portfolio company
+Ensilitech,ENSILITECH LIMITED,,Clean Energy,Silicon Anode Materials for Li-Ion Batteries,UNI,,Yes,,,,University of Bath,2021,,High-performance silicon anode materials for next-generation lithium-ion batteries,SETsquared/QantX portfolio company; Bath spinout
+CareLoop,CARELOOP HEALTH LIMITED,,AI / MedTech,Digital Therapeutics for Severe Mental Illness,UNI,,Yes,,,,University of Manchester,2021,£1.8m,Digital therapeutic platform for severe mental illness; remote monitoring and intervention,Manchester spinout 2021; NIHR and Innovate UK funding
+Microplate Dx,MICROPLATE DX LIMITED,,Biotech / Life Sciences,Antimicrobial Resistance Diagnostics,UNI; PAT,,Yes,Yes,,,University of Strathclyde,2021,,Novel solutions to global antimicrobial resistance; rapid diagnostic testing,Strathclyde spinout; multi-award-winning; patents on AMR detection methods
+Isomorphic Labs,ISOMORPHIC LABS LIMITED,13223825,AI / Biotech,AI Drug Discovery,DBT,,,,,Yes,Google DeepMind origin,2021,$600m (2025),AI-first platform for drug discovery; AlphaFold technology commercialisation; acquired $600m March 2025,London-based; founded 2021 by Demis Hassabis; DBT Deep Tech Lookbook
+Monumo,MONUMO LIMITED,,AI,AI for Electric Motor Design,DBT; UKI,Yes,,,,Yes,,2021,,AI and ML for electric motor innovation; removes rare earth magnets; reduces EV motor weight/cost,DBT Deep Tech Lookbook; Innovate UK funded deep-tech engineering company
+BeyondMath,BEYONDMATH LIMITED,,AI,AI-Powered CFD / Digital Wind Tunnel,DBT; UKI,Yes,,,,Yes,,2021,$8.5m seed,"Digital Wind Tunnel enabling simulations 1,000x faster than traditional CFD; $8.5m seed (2024)",DBT Deep Tech Lookbook 2025; Innovate UK grant recipient
+Helsing,HELSING UK LIMITED,,AI,AI for Defence & National Security,PRO,,,,Yes,,,2021,,European AI-first defence company; MoD Asgard DDAfD programme winner,UK-registered entity; MoD Asgard programme supplier 2026
+Anduril Industries,ANDURIL INDUSTRIES UK LIMITED,,AI / Robotics,Autonomous Defence Systems,PRO,,,,Yes,,,2021,,AI-powered autonomous defence systems; UK entity established for MoD engagement,MoD Asgard DDAfD framework; US company with significant UK presence
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
+,,,,,,,,,,,,,,,
