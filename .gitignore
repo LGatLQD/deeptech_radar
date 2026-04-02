@@ -1,3 +1,13 @@
+
+# Database dumps / exports
+deeptech_radar.sql
+deeptech_radar_clean.sql
+deeptech_radar_schema.sql
+deeptech_radar_share.sql
+deeptech_radar_share_clean.sql
+share_*.csv
+*.dump
+
 node_modules
 .env
 dist
