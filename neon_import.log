@@ -1,0 +1,127 @@
+SET
+SET
+SET
+SET
+SET
+SET
+ set_config 
+------------
+ 
+(1 row)
+
+SET
+SET
+SET
+SET
+SET
+SET
+ERROR:  relation "charges" already exists
+ERROR:  relation "charges_id_seq" already exists
+ALTER SEQUENCE
+ERROR:  relation "companies" already exists
+ERROR:  relation "core_screen_results" already exists
+ERROR:  relation "cross_ref_matches" already exists
+ERROR:  relation "cross_reference_companies" already exists
+ERROR:  relation "cross_reference_raw" already exists
+ERROR:  relation "cross_reference_resolved" already exists
+ERROR:  relation "enrichment_results" already exists
+ERROR:  relation "filings" already exists
+ERROR:  relation "filings_id_seq" already exists
+ALTER SEQUENCE
+ERROR:  relation "investment_shortlist" already exists
+ERROR:  relation "investment_shortlist_v2" already exists
+ERROR:  relation "investment_tool_view" already exists
+ERROR:  relation "officers" already exists
+ERROR:  relation "officers_id_seq" already exists
+ALTER SEQUENCE
+ERROR:  relation "pscs" already exists
+ERROR:  relation "pscs_id_seq" already exists
+ALTER SEQUENCE
+ERROR:  relation "refresh_log" already exists
+ERROR:  relation "refresh_log_id_seq" already exists
+ALTER SEQUENCE
+ERROR:  relation "refresh_queue" already exists
+ERROR:  relation "share_company_numbers" already exists
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ALTER TABLE
+ERROR:  duplicate key value violates unique constraint "charges_pkey"
+DETAIL:  Key (id)=(85) already exists.
+CONTEXT:  COPY charges, line 1
+ERROR:  duplicate key value violates unique constraint "companies_pkey"
+DETAIL:  Key (company_number)=(15986118) already exists.
+CONTEXT:  COPY companies, line 1
+ERROR:  duplicate key value violates unique constraint "core_screen_results_pkey"
+DETAIL:  Key (company_number)=(15986118) already exists.
+CONTEXT:  COPY core_screen_results, line 1
+COPY 0
+COPY 0
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "enrichment_results_pkey"
+DETAIL:  Key (company_number)=(15986118) already exists.
+CONTEXT:  COPY enrichment_results, line 1
+ERROR:  duplicate key value violates unique constraint "filings_pkey"
+DETAIL:  Key (id)=(11960) already exists.
+CONTEXT:  COPY filings, line 1
+ERROR:  duplicate key value violates unique constraint "officers_pkey"
+DETAIL:  Key (id)=(15754) already exists.
+CONTEXT:  COPY officers, line 1
+ERROR:  duplicate key value violates unique constraint "pscs_pkey"
+DETAIL:  Key (id)=(2134) already exists.
+CONTEXT:  COPY pscs, line 1
+COPY 0
+COPY 0
+ERROR:  duplicate key value violates unique constraint "share_company_numbers_pkey"
+DETAIL:  Key (company_number)=(15986118) already exists.
+CONTEXT:  COPY share_company_numbers, line 1
+ setval 
+--------
+      1
+(1 row)
+
+ setval 
+--------
+      1
+(1 row)
+
+ setval 
+--------
+      1
+(1 row)
+
+ setval 
+--------
+      1
+(1 row)
+
+ setval 
+--------
+      1
+(1 row)
+
+ERROR:  multiple primary keys for table "charges" are not allowed
+ERROR:  multiple primary keys for table "companies" are not allowed
+ERROR:  multiple primary keys for table "core_screen_results" are not allowed
+ERROR:  multiple primary keys for table "enrichment_results" are not allowed
+ERROR:  multiple primary keys for table "filings" are not allowed
+ERROR:  multiple primary keys for table "officers" are not allowed
+ERROR:  multiple primary keys for table "pscs" are not allowed
+ERROR:  multiple primary keys for table "refresh_log" are not allowed
+ERROR:  multiple primary keys for table "refresh_queue" are not allowed
+ERROR:  multiple primary keys for table "share_company_numbers" are not allowed
+ERROR:  relation "idx_charges_company_number" already exists
+ERROR:  relation "idx_companies_company_status" already exists
+ERROR:  relation "idx_companies_company_type" already exists
+ERROR:  relation "idx_companies_date_of_creation" already exists
+ERROR:  relation "idx_filings_company_number" already exists
+ERROR:  relation "idx_officers_company_number" already exists
+ERROR:  relation "idx_pscs_company_number" already exists
+ERROR:  constraint "charges_company_number_fkey" for relation "charges" already exists
+ERROR:  constraint "core_screen_results_company_number_fkey" for relation "core_screen_results" already exists
+ERROR:  constraint "enrichment_results_company_number_fkey" for relation "enrichment_results" already exists
+ERROR:  constraint "filings_company_number_fkey" for relation "filings" already exists
+ERROR:  constraint "officers_company_number_fkey" for relation "officers" already exists
+ERROR:  constraint "pscs_company_number_fkey" for relation "pscs" already exists

@@ -1,5 +1,16 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
+#Databases
+deeptech_radar.sql
+deeptech_radar_clean.sql
+deeptech_radar_schema.sql
+deeptech_radar_share.sql
+deeptech_radar_share_clean.sql
+share_*.csv
+*.dump
+
+
+
 # dependencies
 /node_modules
 /.pnp
