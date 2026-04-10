@@ -43,6 +43,9 @@ type CompanyRow = {
   why_selected: string[] | null;
   risk_flags: string[] | null;
   directors?: Director[] | null;
+  sic_score: number | null;
+  keyword_score: number | null;
+  cluster_score: number | null;
 };
 
 type SortKey =
@@ -516,52 +519,77 @@ export default function InvestmentToolApp() {
                               <div className="grid gap-4 lg:grid-cols-4">
                                 <div className="rounded-2xl border bg-white p-4">
                                   <div className="text-sm font-semibold">Scores</div>
-                                  <div className="mt-3 space-y-3 text-sm text-slate-700">
+                                  <div className="mt-3 space-y-4 text-sm text-slate-700">
+
+                                    {/* Core score */}
                                     <div>
                                       <div className="flex justify-between font-medium">
                                         <span>Core</span>
                                         <span>{scoreCell(row.core_score)}</span>
                                       </div>
                                       <div className="mt-1 text-xs text-slate-500">
-                                        Deep-tech relevance signal from SIC, name keywords and cluster location.
+                                        Deep-tech relevance from SIC codes, name keywords and cluster location.
+                                      </div>
+                                      <div className="mt-2 space-y-1.5">
+                                        {[
+                                          { label: 'SIC', value: row.sic_score, max: 28 },
+                                          { label: 'Keyword', value: row.keyword_score, max: 25 },
+                                          { label: 'Cluster', value: row.cluster_score, max: 20 },
+                                        ].map(({ label, value, max }) => (
+                                          <div key={label}>
+                                            <div className="flex justify-between text-xs text-slate-500 mb-0.5">
+                                              <span>{label}</span>
+                                              <span>{value ?? '—'} / {max}</span>
+                                            </div>
+                                            <div className="h-1.5 w-full rounded-full bg-slate-100">
+                                              <div
+                                                className="h-1.5 rounded-full bg-slate-700"
+                                                style={{ width: `${Math.min(100, ((value ?? 0) / max) * 100)}%` }}
+                                              />
+                                            </div>
+                                          </div>
+                                        ))}
                                       </div>
                                     </div>
-                                    <div>
+
+                                    <div className="border-t pt-3">
                                       <div className="flex justify-between font-medium">
                                         <span>Alignment</span>
                                         <span>{scoreCell(row.alignment_score)}</span>
                                       </div>
                                       <div className="mt-1 text-xs text-slate-500">
-                                        Structural credibility signal from directors, ownership and filing activity.
+                                        Structural credibility from directors, ownership and filing activity.
+                                      </div>
+                                      <div className="mt-2 space-y-1.5">
+                                        {[
+                                          { label: 'Team', value: row.team_score, max: 15 },
+                                          { label: 'Cap table', value: row.cap_table_score, max: 15 },
+                                          { label: 'Activity', value: row.activity_score, max: 15 },
+                                        ].map(({ label, value, max }) => (
+                                          <div key={label}>
+                                            <div className="flex justify-between text-xs text-slate-500 mb-0.5">
+                                              <span>{label}</span>
+                                              <span>{value ?? '—'} / {max}</span>
+                                            </div>
+                                            <div className="h-1.5 w-full rounded-full bg-slate-100">
+                                              <div
+                                                className="h-1.5 rounded-full bg-indigo-500"
+                                                style={{ width: `${Math.min(100, ((value ?? 0) / max) * 100)}%` }}
+                                              />
+                                            </div>
+                                          </div>
+                                        ))}
                                       </div>
                                     </div>
-                                    <div>
-                                      <div className="flex justify-between">
-                                        <span>Team</span>
-                                        <span>{scoreCell(row.team_score)}</span>
+
+                                    <div className="border-t pt-3">
+                                      <div className="flex justify-between font-semibold">
+                                        <span>Combined</span>
+                                        <span>{scoreCell(row.combined_score)}</span>
                                       </div>
-                                      <div className="mt-1 text-xs text-slate-500">
-                                        Breadth of directors and management structure.
-                                      </div>
+                                      <div className="mt-1 text-xs text-slate-500">Core + Alignment</div>
                                     </div>
-                                    <div>
-                                      <div className="flex justify-between">
-                                        <span>Cap table</span>
-                                        <span>{scoreCell(row.cap_table_score)}</span>
-                                      </div>
-                                      <div className="mt-1 text-xs text-slate-500">
-                                        Ownership complexity inferred from PSC structure.
-                                      </div>
-                                    </div>
-                                    <div>
-                                      <div className="flex justify-between">
-                                        <span>Activity</span>
-                                        <span>{scoreCell(row.activity_score)}</span>
-                                      </div>
-                                      <div className="mt-1 text-xs text-slate-500">
-                                        Filing depth and evidence of corporate activity beyond incorporation.
-                                      </div>
-                                    </div>
+
                                   </div>
                                 </div>
 
