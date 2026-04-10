@@ -9,6 +9,8 @@ import {
   Loader2,
   ExternalLink,
   RefreshCw,
+  Bookmark,
+  Trash2,
 } from 'lucide-react';
 
 type Director = {
@@ -113,6 +115,28 @@ export default function InvestmentToolApp() {
   const [sortDir, setSortDir] = useState<SortDir>('asc');
 
   const [expanded, setExpanded] = useState<string | null>(null);
+
+  type TabType = 'all' | 'watchlist' | 'bin';
+  const [activeTab, setActiveTab] = useState<TabType>('all');
+  const [watchlistMap, setWatchlistMap] = useState<Record<string, string>>({});
+  const [binMap, setBinMap] = useState<Record<string, string>>({});
+  const [pendingAction, setPendingAction] = useState<{ company_number: string; type: 'watchlist' | 'bin' } | null>(null);
+  const [pendingReason, setPendingReason] = useState('');
+
+  useEffect(() => {
+    async function loadLists() {
+      const [wRes, bRes] = await Promise.all([fetch('/api/watchlist'), fetch('/api/bin')]);
+      const wData = await wRes.json();
+      const bData = await bRes.json();
+      const wMap: Record<string, string> = {};
+      for (const r of wData.rows ?? []) wMap[r.company_number] = r.reason ?? '';
+      const bMap: Record<string, string> = {};
+      for (const r of bData.rows ?? []) bMap[r.company_number] = r.reason ?? '';
+      setWatchlistMap(wMap);
+      setBinMap(bMap);
+    }
+    loadLists();
+  }, []);
 
   const stages = ['seed', 'post-seed', 'pre-seed', 'unknown'];
   const hubs = [
@@ -253,6 +277,30 @@ export default function InvestmentToolApp() {
       sortKey: 'rank_position',
       sortDir: 'asc',
     });
+  }
+
+  async function addToWatchlist(company_number: string, reason: string) {
+    await fetch('/api/watchlist', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ company_number, reason }) });
+    setWatchlistMap((prev) => ({ ...prev, [company_number]: reason }));
+    setPendingAction(null);
+    setPendingReason('');
+  }
+
+  async function removeFromWatchlist(company_number: string) {
+    await fetch('/api/watchlist', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ company_number }) });
+    setWatchlistMap((prev) => { const next = { ...prev }; delete next[company_number]; return next; });
+  }
+
+  async function addToBin(company_number: string, reason: string) {
+    await fetch('/api/bin', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ company_number, reason }) });
+    setBinMap((prev) => ({ ...prev, [company_number]: reason }));
+    setPendingAction(null);
+    setPendingReason('');
+  }
+
+  async function removeFromBin(company_number: string) {
+    await fetch('/api/bin', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ company_number }) });
+    setBinMap((prev) => { const next = { ...prev }; delete next[company_number]; return next; });
   }
 
   function renderFilterGroup(
@@ -411,11 +459,29 @@ export default function InvestmentToolApp() {
 
         <div className="rounded-3xl border bg-white shadow-sm">
           <div className="flex items-center justify-between border-b px-5 py-4">
-            <div className="flex items-center gap-2 text-sm font-semibold">
-              <Filter className="h-4 w-4" /> Results
+            <div className="flex gap-1 rounded-xl border bg-slate-50 p-1">
+              {(['all', 'watchlist', 'bin'] as TabType[]).map((tab) => {
+                const count = tab === 'all'
+                  ? rows.filter((r) => !binMap[r.company_number]).length
+                  : tab === 'watchlist'
+                  ? Object.keys(watchlistMap).length
+                  : Object.keys(binMap).length;
+                return (
+                  <button
+                    key={tab}
+                    type="button"
+                    onClick={() => setActiveTab(tab)}
+                    className={`rounded-lg px-4 py-1.5 text-sm font-medium transition ${
+                      activeTab === tab ? 'bg-white text-slate-900 shadow-sm' : 'text-slate-500 hover:text-slate-700'
+                    }`}
+                  >
+                    {tab === 'all' ? 'All' : tab === 'watchlist' ? 'Watchlist' : 'Binned'} <span className="ml-1 text-xs text-slate-400">{count}</span>
+                  </button>
+                );
+              })}
             </div>
             <div className="text-sm text-slate-500">
-              Showing {returned.toLocaleString()} of {total.toLocaleString()} matches
+              {activeTab === 'all' ? `Showing ${returned.toLocaleString()} of ${total.toLocaleString()} matches` : ''}
             </div>
           </div>
 
@@ -443,7 +509,14 @@ export default function InvestmentToolApp() {
                   </tr>
                 </thead>
                 <tbody>
-                  {rows.map((row) => {
+                  {rows
+                    .filter((row) => {
+                      if (activeTab === 'all') return !binMap[row.company_number];
+                      if (activeTab === 'watchlist') return !!watchlistMap[row.company_number];
+                      if (activeTab === 'bin') return !!binMap[row.company_number];
+                      return true;
+                    })
+                    .map((row) => {
                     const isOpen = expanded === row.company_number;
                     return (
                       <React.Fragment key={row.company_number}>
@@ -496,23 +569,118 @@ export default function InvestmentToolApp() {
                           <td className="px-4 py-3">{scoreCell(row.core_score)}</td>
                           <td className="px-4 py-3">{scoreCell(row.alignment_score)}</td>
                           <td className="px-4 py-3 text-right">
-                            <button
-                              type="button"
-                              onClick={() => setExpanded(isOpen ? null : row.company_number)}
-                              className="rounded-xl border px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
-                            >
-                              {isOpen ? (
-                                <span className="inline-flex items-center gap-1">
-                                  <ChevronUp className="h-4 w-4" /> Hide
-                                </span>
+                            <div className="flex items-center justify-end gap-2">
+                              {/* Watchlist button */}
+                              <button
+                                type="button"
+                                title={watchlistMap[row.company_number] ? 'Remove from watchlist' : 'Add to watchlist'}
+                                onClick={() => {
+                                  if (watchlistMap[row.company_number]) {
+                                    removeFromWatchlist(row.company_number);
+                                  } else {
+                                    setPendingAction({ company_number: row.company_number, type: 'watchlist' });
+                                    setPendingReason('');
+                                  }
+                                }}
+                                className={`rounded-xl border p-2 transition ${
+                                  watchlistMap[row.company_number]
+                                    ? 'border-amber-300 bg-amber-50 text-amber-600'
+                                    : 'border-slate-200 text-slate-400 hover:border-amber-300 hover:text-amber-500'
+                                }`}
+                              >
+                                <Bookmark className="h-4 w-4" />
+                              </button>
+                              {/* Bin button */}
+                              {activeTab !== 'bin' ? (
+                                <button
+                                  type="button"
+                                  title="Move to bin"
+                                  onClick={() => {
+                                    setPendingAction({ company_number: row.company_number, type: 'bin' });
+                                    setPendingReason('');
+                                  }}
+                                  className="rounded-xl border border-slate-200 p-2 text-slate-400 transition hover:border-red-300 hover:text-red-500"
+                                >
+                                  <Trash2 className="h-4 w-4" />
+                                </button>
                               ) : (
-                                <span className="inline-flex items-center gap-1">
-                                  <ChevronDown className="h-4 w-4" /> Details
-                                </span>
+                                <button
+                                  type="button"
+                                  onClick={() => removeFromBin(row.company_number)}
+                                  className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50"
+                                >
+                                  Restore
+                                </button>
                               )}
-                            </button>
+                              {/* Details button */}
+                              <button
+                                type="button"
+                                onClick={() => setExpanded(isOpen ? null : row.company_number)}
+                                className="rounded-xl border px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
+                              >
+                                {isOpen ? (
+                                  <span className="inline-flex items-center gap-1">
+                                    <ChevronUp className="h-4 w-4" /> Hide
+                                  </span>
+                                ) : (
+                                  <span className="inline-flex items-center gap-1">
+                                    <ChevronDown className="h-4 w-4" /> Details
+                                  </span>
+                                )}
+                              </button>
+                            </div>
                           </td>
                         </tr>
+                        {pendingAction?.company_number === row.company_number && (
+                          <tr className="border-t bg-amber-50">
+                            <td colSpan={10} className="px-5 py-3">
+                              <div className="flex items-center gap-3">
+                                <span className="text-sm font-medium text-slate-700">
+                                  {pendingAction.type === 'watchlist' ? 'Add to watchlist:' : 'Move to bin:'}
+                                </span>
+                                <select
+                                  value={pendingReason}
+                                  onChange={(e) => setPendingReason(e.target.value)}
+                                  className="rounded-xl border border-slate-300 px-3 py-1.5 text-sm"
+                                >
+                                  <option value="">Select reason…</option>
+                                  {pendingAction.type === 'watchlist' ? (
+                                    <>
+                                      <option value="In Pipeline">In Pipeline</option>
+                                      <option value="Worth Monitoring">Worth Monitoring</option>
+                                      <option value="Other">Other</option>
+                                    </>
+                                  ) : (
+                                    <>
+                                      <option value="Not DeepTech">Not DeepTech</option>
+                                      <option value="Shell Company">Shell Company</option>
+                                      <option value="Not Active">Not Active</option>
+                                      <option value="Other">Other</option>
+                                    </>
+                                  )}
+                                </select>
+                                <button
+                                  type="button"
+                                  disabled={!pendingReason}
+                                  onClick={() => {
+                                    if (pendingAction.type === 'watchlist') addToWatchlist(pendingAction.company_number, pendingReason);
+                                    else addToBin(pendingAction.company_number, pendingReason);
+                                  }}
+                                  className="rounded-xl bg-slate-900 px-4 py-1.5 text-sm font-medium text-white disabled:opacity-40"
+                                >
+                                  Confirm
+                                </button>
+                                <button
+                                  type="button"
+                                  onClick={() => { setPendingAction(null); setPendingReason(''); }}
+                                  className="text-sm text-slate-500 hover:text-slate-700"
+                                >
+                                  Cancel
+                                </button>
+                              </div>
+                            </td>
+                          </tr>
+                        )}
                         {isOpen && (
                           <tr className="border-t bg-slate-50">
                             <td colSpan={10} className="px-4 py-4">
