@@ -524,7 +524,7 @@ export default function InvestmentToolApp() {
                                     {/* Core score */}
                                     <div>
                                       <div className="flex justify-between font-medium">
-                                        <span>Core</span>
+                                        <span>Core <span className="font-normal text-slate-400">(First Ranking)</span></span>
                                         <span>{scoreCell(row.core_score)}</span>
                                       </div>
                                       <div className="mt-1 text-xs text-slate-500">
@@ -532,13 +532,13 @@ export default function InvestmentToolApp() {
                                       </div>
                                       <div className="mt-2 space-y-1.5">
                                         {[
-                                          { label: 'SIC', value: row.sic_score, max: 28 },
-                                          { label: 'Keyword', value: row.keyword_score, max: 25 },
-                                          { label: 'Cluster', value: row.cluster_score, max: 20 },
-                                        ].map(({ label, value, max }) => (
+                                          { label: 'SIC', desc: 'Deep-tech code matches', value: row.sic_score, max: 28 },
+                                          { label: 'Keyword', desc: 'Deep-tech name signal', value: row.keyword_score, max: 25 },
+                                          { label: 'Cluster', desc: 'Located in innovation hub', value: row.cluster_score, max: 20 },
+                                        ].map(({ label, desc, value, max }) => (
                                           <div key={label}>
                                             <div className="flex justify-between text-xs text-slate-500 mb-0.5">
-                                              <span>{label}</span>
+                                              <span>{label} <span className="text-slate-400">— {desc}</span></span>
                                               <span>{value ?? '—'} / {max}</span>
                                             </div>
                                             <div className="h-1.5 w-full rounded-full bg-slate-100">
@@ -554,7 +554,7 @@ export default function InvestmentToolApp() {
 
                                     <div className="border-t pt-3">
                                       <div className="flex justify-between font-medium">
-                                        <span>Alignment</span>
+                                        <span>Alignment <span className="font-normal text-slate-400">(Enriched Ranking)</span></span>
                                         <span>{scoreCell(row.alignment_score)}</span>
                                       </div>
                                       <div className="mt-1 text-xs text-slate-500">
@@ -562,13 +562,13 @@ export default function InvestmentToolApp() {
                                       </div>
                                       <div className="mt-2 space-y-1.5">
                                         {[
-                                          { label: 'Team', value: row.team_score, max: 15 },
-                                          { label: 'Cap table', value: row.cap_table_score, max: 15 },
-                                          { label: 'Activity', value: row.activity_score, max: 15 },
-                                        ].map(({ label, value, max }) => (
+                                          { label: 'Team', desc: 'Director breadth & structure', value: row.team_score, max: 15 },
+                                          { label: 'Cap table', desc: 'Ownership complexity', value: row.cap_table_score, max: 15 },
+                                          { label: 'Activity', desc: 'Filing depth beyond incorporation', value: row.activity_score, max: 15 },
+                                        ].map(({ label, desc, value, max }) => (
                                           <div key={label}>
                                             <div className="flex justify-between text-xs text-slate-500 mb-0.5">
-                                              <span>{label}</span>
+                                              <span>{label} <span className="text-slate-400">— {desc}</span></span>
                                               <span>{value ?? '—'} / {max}</span>
                                             </div>
                                             <div className="h-1.5 w-full rounded-full bg-slate-100">
