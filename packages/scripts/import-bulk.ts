@@ -4,7 +4,8 @@ import csv from 'csv-parser';
 import { pool } from '../db';
 
 const FILE_PATH =
-  '/Users/macbook/Documents/Claude/Projects/DeepTech_Finder/deeptech-radar/Companies_house_extractor/BasicCompanyData.csv';
+  process.argv[2] ||
+  '/Users/macbook/Downloads/BasicCompanyDataAsOneFile-2026-04-01.csv';
 
 const BATCH_SIZE = 1000;
 
