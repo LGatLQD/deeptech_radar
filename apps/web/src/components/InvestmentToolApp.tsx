@@ -122,8 +122,6 @@ export default function InvestmentToolApp() {
   const [binMap, setBinMap] = useState<Record<string, string>>({});
   const [pendingAction, setPendingAction] = useState<{ company_number: string; type: 'watchlist' | 'bin' } | null>(null);
   const [pendingReason, setPendingReason] = useState('');
-  const [page, setPage] = useState(1);
-  const [totalPages, setTotalPages] = useState(1);
 
   useEffect(() => {
     async function loadLists() {
@@ -174,7 +172,6 @@ export default function InvestmentToolApp() {
     validatedOnly?: boolean;
     sortKey?: SortKey;
     sortDir?: SortDir;
-    page?: number;
   }) {
     try {
       setLoading(true);
@@ -189,7 +186,6 @@ export default function InvestmentToolApp() {
       const validated = args?.validatedOnly ?? validatedOnly;
       const sortBy = args?.sortKey ?? sortKey;
       const direction = args?.sortDir ?? sortDir;
-      const pageNum = args?.page ?? page;
 
       if (q.trim()) params.set('q', q.trim());
       stageValues.forEach((v) => params.append('stage', v));
@@ -198,7 +194,6 @@ export default function InvestmentToolApp() {
       if (validated) params.set('validated_only', 'true');
       params.set('sort_key', sortBy);
       params.set('sort_dir', direction);
-      params.set('page', String(pageNum));
 
       const res = await fetch(`/api/investment-tool?${params.toString()}`);
       if (!res.ok) throw new Error(`Request failed: ${res.status}`);
@@ -208,8 +203,6 @@ export default function InvestmentToolApp() {
       setRows(data.rows ?? []);
       setTotal(data.total ?? 0);
       setReturned(data.returned ?? 0);
-      setPage(data.page ?? 1);
-      setTotalPages(Math.max(1, Math.ceil((data.total ?? 0) / (data.pageSize ?? 300))));
       setExpanded(null);
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Failed to load data');
@@ -255,7 +248,6 @@ export default function InvestmentToolApp() {
       validatedOnly: validatedOnlyDraft,
       sortKey: sortKeyDraft,
       sortDir: sortDirDraft,
-      page: 1,
     });
   }
 
@@ -284,7 +276,6 @@ export default function InvestmentToolApp() {
       validatedOnly: false,
       sortKey: 'rank_position',
       sortDir: 'asc',
-      page: 1,
     });
   }
 
@@ -399,7 +390,7 @@ export default function InvestmentToolApp() {
               />
             </div>
             <div className="mt-2 text-xs text-slate-500">
-              Search runs across the full screened universe. Results are paginated at 300 per page.
+              Search runs across the full screened universe and returns the top 300 matches.
             </div>
           </div>
 
@@ -493,30 +484,6 @@ export default function InvestmentToolApp() {
               {activeTab === 'all' ? `Showing ${returned.toLocaleString()} of ${total.toLocaleString()} matches` : ''}
             </div>
           </div>
-
-          {!loading && !error && totalPages > 1 && activeTab === 'all' && (
-            <div className="flex items-center justify-between border-b px-5 py-3 text-sm">
-              <button
-                type="button"
-                disabled={page <= 1}
-                onClick={() => loadData({ page: page - 1 })}
-                className="inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-slate-600 disabled:opacity-40"
-              >
-                ← Previous
-              </button>
-              <span className="text-slate-500">
-                Page <span className="font-semibold text-slate-900">{page}</span> of <span className="font-semibold text-slate-900">{totalPages}</span>
-              </span>
-              <button
-                type="button"
-                disabled={page >= totalPages}
-                onClick={() => loadData({ page: page + 1 })}
-                className="inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-slate-600 disabled:opacity-40"
-              >
-                Next →
-              </button>
-            </div>
-          )}
 
           {loading ? (
             <div className="flex items-center justify-center gap-3 p-10 text-slate-600">
@@ -894,30 +861,6 @@ export default function InvestmentToolApp() {
                   })}
                 </tbody>
               </table>
-            </div>
-          )}
-
-          {!loading && !error && totalPages > 1 && activeTab === 'all' && (
-            <div className="flex items-center justify-between border-t px-5 py-3 text-sm">
-              <button
-                type="button"
-                disabled={page <= 1}
-                onClick={() => loadData({ page: page - 1 })}
-                className="inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-slate-600 disabled:opacity-40"
-              >
-                ← Previous
-              </button>
-              <span className="text-slate-500">
-                Page <span className="font-semibold text-slate-900">{page}</span> of <span className="font-semibold text-slate-900">{totalPages}</span>
-              </span>
-              <button
-                type="button"
-                disabled={page >= totalPages}
-                onClick={() => loadData({ page: page + 1 })}
-                className="inline-flex items-center gap-1.5 rounded-xl border px-3 py-1.5 text-slate-600 disabled:opacity-40"
-              >
-                Next →
-              </button>
             </div>
           )}
         </div>

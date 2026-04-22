@@ -23,9 +23,6 @@ export async function GET(req: NextRequest) {
     const hub = searchParams.getAll('hub');
     const category = searchParams.getAll('category');
     const validatedOnly = searchParams.get('validated_only') === 'true';
-    const page = Math.max(1, parseInt(searchParams.get('page') || '1', 10));
-    const PAGE_SIZE = 300;
-    const offset = (page - 1) * PAGE_SIZE;
     const sortKey = searchParams.get('sort_key') || 'rank_position';
     const sortDir =
       (searchParams.get('sort_dir') || 'asc').toLowerCase() === 'desc'
@@ -119,7 +116,7 @@ export async function GET(req: NextRequest) {
       LEFT JOIN directors d
         ON r.company_number = d.company_number
       ORDER BY ${orderColumn} ${sortDir}, r.company_name ASC
-      LIMIT ${PAGE_SIZE} OFFSET ${offset}
+      LIMIT 300
     `;
 
     const countSql = `
@@ -137,8 +134,6 @@ export async function GET(req: NextRequest) {
       rows: rowsRes.rows,
       total: countRes.rows[0]?.total ?? 0,
       returned: rowsRes.rows.length,
-      page,
-      pageSize: PAGE_SIZE,
     });
   } catch (error) {
     console.error('API error:', error);

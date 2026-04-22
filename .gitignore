@@ -7,7 +7,7 @@ deeptech_radar_share.sql
 deeptech_radar_share_clean.sql
 share_*.csv
 *.dump
-
+.DS_Store
 node_modules
 .env
 dist
