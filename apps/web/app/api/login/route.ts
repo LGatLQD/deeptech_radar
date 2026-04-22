@@ -1,17 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { createHmac } from 'crypto';
-
-function sign(value: string, secret: string) {
-  return createHmac('sha256', secret).update(value).digest('hex');
-}
 
 export async function POST(request: NextRequest) {
   const { password } = await request.json();
 
   const expectedPassword = process.env.APP_PASSWORD;
-  const secret = process.env.APP_SESSION_SECRET;
 
-  if (!expectedPassword || !secret) {
+  if (!expectedPassword) {
     return NextResponse.json(
       { error: 'Server not configured' },
       { status: 500 }
@@ -25,11 +19,8 @@ export async function POST(request: NextRequest) {
     );
   }
 
-  const payload = 'authenticated';
-  const cookieValue = `${payload}.${sign(payload, secret)}`;
-
   const response = NextResponse.json({ ok: true });
-  response.cookies.set('radar_session', cookieValue, {
+  response.cookies.set('radar_session', 'authenticated', {
     httpOnly: true,
     secure: true,
     sameSite: 'lax',
