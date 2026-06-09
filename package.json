@@ -6,7 +6,13 @@
     "doc": "docs"
   },
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+  "download:bulk": "tsx packages/scripts/download-bulk.ts",
+  "import:bulk": "tsx packages/scripts/import-bulk.ts",
+  "score:core": "tsx packages/scripts/run-core-screen.ts",
+  "enrich": "tsx packages/scripts/run-enrichment.ts",
+  "score:level3": "tsx packages/scripts/run-level3-scores.ts",
+  "refresh": "npm run download:bulk && npm run import:bulk && npm run score:core && npm run enrich && npm run score:level3"
+  
   },
   "keywords": [],
   "author": "",
