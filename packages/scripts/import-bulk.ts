@@ -4,7 +4,7 @@ import csv from 'csv-parser';
 import { pool } from '../db';
 
 const FILE_PATH =
-  '/Users/macbook/Documents/Claude/Projects/DeepTech_Finder/deeptech-radar/Companies_house_extractor/BasicCompanyData.csv';
+  process.env.COMPANIES_HOUSE_CSV_PATH || 'data/BasicCompanyData.csv';
 
 const BATCH_SIZE = 1000;
 
@@ -77,7 +77,8 @@ function isEligible(row: CsvRow): boolean {
 
   if (!companyNumber) return false;
   if (category !== 'private limited company') return false;
-  if (status !== 'active') return false;
+  // Do not filter by status here. We import/update non-active companies too,
+  // so dissolved companies do not remain incorrectly marked as active.
   if (!incorporationDate) return false;
 
   const fiveYearsAgo = new Date();
@@ -110,6 +111,7 @@ async function insertBatch(batch: CsvRow[]) {
       JSON.stringify(extractSicCodes(row))
     );
   }
+  
 
   await pool.query(
     `
@@ -142,8 +144,38 @@ async function insertBatch(batch: CsvRow[]) {
   );
 }
 
+async function insertBatchWithRetry(
+  batch: CsvRow[],
+  attempts = 3
+) {
+  for (let attempt = 1; attempt <= attempts; attempt++) {
+    try {
+      await insertBatch(batch);
+      return;
+    } catch (err) {
+      console.error(
+        `Batch insert failed (attempt ${attempt}/${attempts})`
+      );
+
+      if (attempt === attempts) {
+        throw err;
+      }
+
+      await new Promise((resolve) =>
+        setTimeout(resolve, attempt * 5000)
+      );
+    }
+  }
+}
+
 async function run() {
   console.log('Starting bulk import...');
+
+    console.log(`Using CSV file: ${FILE_PATH}`);
+
+  if (!fs.existsSync(FILE_PATH)) {
+    throw new Error(`CSV file not found at: ${FILE_PATH}`);
+  }
 
   const stream = fs.createReadStream(FILE_PATH).pipe(
     csv({
@@ -175,7 +207,7 @@ async function run() {
     batch.push(row);
 
     if (batch.length >= BATCH_SIZE) {
-      await insertBatch(batch);
+      await insertBatchWithRetry(batch);
       inserted += batch.length;
       batch = [];
 
@@ -186,7 +218,7 @@ async function run() {
   }
 
   if (batch.length > 0) {
-    await insertBatch(batch);
+    await insertBatchWithRetry(batch);
     inserted += batch.length;
   }
 
