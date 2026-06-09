@@ -2,7 +2,7 @@ import '../config/env';
 import fs from 'fs';
 import path from 'path';
 import https from 'https';
-import { execFileSync } from 'child_process';
+import unzipper from 'unzipper';
 
 const DATA_DIR = process.env.COMPANIES_HOUSE_DATA_DIR || 'data';
 const ZIP_PATH = path.join(DATA_DIR, 'BasicCompanyData.zip');
@@ -82,7 +82,10 @@ async function run() {
   await download(bulkUrl, ZIP_PATH);
 
   console.log(`Extracting ${ZIP_PATH}`);
-  execFileSync('unzip', ['-o', ZIP_PATH, '-d', DATA_DIR], { stdio: 'inherit' });
+  await fs
+    .createReadStream(ZIP_PATH)
+    .pipe(unzipper.Extract({ path: DATA_DIR }))
+    .promise();
 
   const files = fs.readdirSync(DATA_DIR);
   const extractedCsv = files.find((file) => file.endsWith('.csv'));
