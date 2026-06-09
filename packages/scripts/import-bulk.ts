@@ -170,8 +170,7 @@ async function insertBatchWithRetry(
 
 async function run() {
   console.log('Starting bulk import...');
-
-    console.log(`Using CSV file: ${FILE_PATH}`);
+  console.log(`Using CSV file: ${FILE_PATH}`);
 
   if (!fs.existsSync(FILE_PATH)) {
     throw new Error(`CSV file not found at: ${FILE_PATH}`);
