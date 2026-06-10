@@ -687,7 +687,7 @@ async function loadSavedWokeloSnapshot(row: CompanyRow) {
                         <button
                           type="button"
                           onClick={() => sortByColumn(key as SortKey)}
-                          className="inline-flex items-center gap-1 cursor-pointer hover:text-slate-900"
+                          className="inline-flex cursor-pointer items-center gap-1 hover:text-slate-900"
                         >
                           {label}
                           {sortKey === key ? (
@@ -700,6 +700,7 @@ async function loadSavedWokeloSnapshot(row: CompanyRow) {
                         </button>
                       </th>
                     ))}
+
                     <th className="px-4 py-3 font-medium">Hub</th>
                     <th className="px-4 py-3 font-medium">Sectors</th>
                     <th className="px-4 py-3 font-medium">Stage</th>
@@ -746,6 +747,10 @@ async function loadSavedWokeloSnapshot(row: CompanyRow) {
                             )}
                           </td>
                           <td className="px-4 py-3">{formatDate(row.date_of_creation)}</td>
+                          <td className="px-4 py-3 font-semibold">{scoreCell(row.combined_score)}</td>
+                          <td className="px-4 py-3">{scoreCell(row.core_score)}</td>
+                          <td className="px-4 py-3">{scoreCell(row.alignment_score)}</td>
+
                           <td className="px-4 py-3">
                             <div>{row.tech_hub}</div>
                             <div className="mt-1 text-xs text-slate-500">{row.registered_locality || '—'}</div>
@@ -763,9 +768,6 @@ async function loadSavedWokeloSnapshot(row: CompanyRow) {
                             <div>{row.stage_estimate || '—'}</div>
                             <div className="mt-1 text-xs text-slate-500">{row.stage_confidence || '—'}</div>
                           </td>
-                          <td className="px-4 py-3 font-semibold">{scoreCell(row.combined_score)}</td>
-                          <td className="px-4 py-3">{scoreCell(row.core_score)}</td>
-                          <td className="px-4 py-3">{scoreCell(row.alignment_score)}</td>
                           <td className="px-4 py-3 text-right">
                             <div className="flex items-center justify-end gap-2">
                             <button
