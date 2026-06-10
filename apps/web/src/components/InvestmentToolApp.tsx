@@ -93,6 +93,57 @@ function linkedInSearchUrl(name: string, company: string): string {
   return `https://www.google.com/search?q=${q}`;
 }
 
+function formatMoney(value: number | null | undefined): string {
+  if (value == null || Number.isNaN(Number(value))) return '—';
+  return new Intl.NumberFormat('en-GB', {
+    style: 'currency',
+    currency: 'GBP',
+    notation: 'compact',
+    maximumFractionDigits: 1,
+  }).format(value);
+}
+
+function formatNumber(value: number | string | null | undefined): string {
+  if (value == null || value === '') return '—';
+  const n = Number(value);
+  if (Number.isNaN(n)) return String(value);
+  return new Intl.NumberFormat('en-GB').format(n);
+}
+
+function latestTrafficGrowth(traffic: any): string {
+  const visits = traffic?.EstimatedMonthlyVisits;
+  if (!visits || typeof visits !== 'object') return '—';
+
+  const entries = Object.entries(visits).sort(([a], [b]) => a.localeCompare(b));
+  if (entries.length < 2) return '—';
+
+  const previous = Number(entries[entries.length - 2][1]);
+  const latest = Number(entries[entries.length - 1][1]);
+
+  if (!previous || Number.isNaN(previous) || Number.isNaN(latest)) return '—';
+
+  const growth = ((latest - previous) / previous) * 100;
+  return `${growth >= 0 ? '+' : ''}${growth.toFixed(0)}%`;
+}
+
+function makeInvestmentSummary(snapshot: any): string[] {
+  const data = snapshot?.result?.data;
+  const firmo = data?.firmographics;
+  const funding = data?.funding?.overall;
+  const headcount = data?.headcount;
+
+  return [
+    firmo?.location ? `Based in ${firmo.location}.` : null,
+    firmo?.founded ? `Founded in ${firmo.founded}.` : null,
+    funding?.funding_stage ? `${funding.funding_stage} funding stage.` : null,
+    funding?.total_funding ? `${formatMoney(funding.total_funding)} total funding reported by Wokelo.` : null,
+    funding?.key_investors?.length ? `Key investor(s): ${funding.key_investors.slice(0, 3).join(', ')}.` : null,
+    headcount?.linkedin_insights?.totalEmployees ? `${formatNumber(headcount.linkedin_insights.totalEmployees)} LinkedIn employees.` : null,
+    firmo?.core_offering || firmo?.short_description || null,
+  ].filter(Boolean) as string[];
+}
+
+
 export default function InvestmentToolApp() {
   const [rows, setRows] = useState<CompanyRow[]>([]);
   const [total, setTotal] = useState(0);
@@ -127,12 +178,15 @@ export default function InvestmentToolApp() {
   const [pendingAction, setPendingAction] = useState<{ company_number: string; type: 'watchlist' | 'bin' } | null>(null);
   const [pendingReason, setPendingReason] = useState('');
   const [wokeloLoading, setWokeloLoading] = useState<string | null>(null);
+  const [wokeloSnapshot, setWokeloSnapshot] = useState<any | null>(null);
+  const [wokeloSnapshotLoading, setWokeloSnapshotLoading] = useState(false);
+  const [wokeloSnapshotCheckedFor, setWokeloSnapshotCheckedFor] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadLists() {
       const [wRes, bRes] = await Promise.all([fetch('/api/watchlist'), fetch('/api/bin')]);
-      const wData = await wRes.json();
-      const bData = await bRes.json();
+      const wData = wRes.ok ? await wRes.json() : { rows: [] };
+      const bData = bRes.ok ? await bRes.json() : { rows: [] };
       const wMap: Record<string, string> = {};
       for (const r of wData.rows ?? []) wMap[r.company_number] = r.reason ?? '';
       const bMap: Record<string, string> = {};
@@ -345,7 +399,10 @@ export default function InvestmentToolApp() {
     const res = await fetch('/api/wokelo/generate-report', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ company: row.company_name }),
+      body: JSON.stringify({
+        company: row.company_name,
+        company_number: row.company_number,
+    }),
     });
 
     const data = await res.json();
@@ -354,12 +411,53 @@ export default function InvestmentToolApp() {
       throw new Error(data.error || `Request failed: ${res.status}`);
     }
 
-    console.log('Wokelo snapshot', data.result);
-    alert(`Wokelo snapshot generated for ${row.company_name}. Check console for now.`);
+    setWokeloSnapshot({
+  companyName: row.company_name,
+  matchedCompany: data.matchedCompany,
+  result: data.result,
+}); 
+
+setWokeloSnapshotCheckedFor(row.company_number);
+
+setExpanded(row.company_number);
+
   } catch (err) {
     alert(err instanceof Error ? err.message : 'Failed to generate Wokelo snapshot');
   } finally {
     setWokeloLoading(null);
+  }
+}
+
+async function loadSavedWokeloSnapshot(row: CompanyRow) {
+  try {
+    setWokeloSnapshotLoading(true);
+    setWokeloSnapshotCheckedFor(null);
+    setWokeloSnapshot(null);
+
+    const res = await fetch(
+      `/api/wokelo/snapshot?company_number=${encodeURIComponent(row.company_number)}`
+    );
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || `Request failed: ${res.status}`);
+    }
+
+    if (data.found) {
+      setWokeloSnapshot({
+        companyName: row.company_name,
+        matchedCompany: data.matchedCompany,
+        result: data.result,
+      });
+    }
+
+    setWokeloSnapshotCheckedFor(row.company_number);
+  } catch {
+    setWokeloSnapshot(null);
+    setWokeloSnapshotCheckedFor(row.company_number);
+  } finally {
+    setWokeloSnapshotLoading(false);
   }
 }
 
@@ -535,6 +633,9 @@ export default function InvestmentToolApp() {
           {renderFilterGroup('Stage', stages, selectedStagesDraft, setSelectedStagesDraft)}
         </div>
 
+
+      
+
         <div className="rounded-3xl border bg-white shadow-sm">
           <div className="flex items-center justify-between border-b px-5 py-4">
             <div className="flex gap-1 rounded-xl border bg-slate-50 p-1">
@@ -674,7 +775,7 @@ export default function InvestmentToolApp() {
                               onClick={() => generateWokeloSnapshot(row)}
                               className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-40"
                             >
-                              {wokeloLoading === row.company_number ? 'Generating…' : 'Wokelo'}
+                              {wokeloLoading === row.company_number ? 'Loading…' : 'View / Generate Wokelo'}
                             </button>
                               {/* Watchlist button */}
                               <button
@@ -721,7 +822,14 @@ export default function InvestmentToolApp() {
                               {/* Details button */}
                               <button
                                 type="button"
-                                onClick={() => setExpanded(isOpen ? null : row.company_number)}
+                                onClick={() => {
+                                  if (isOpen) {
+                                    setExpanded(null);
+                                  } else {
+                                    setExpanded(row.company_number);
+                                    loadSavedWokeloSnapshot(row);
+                                  }
+                                }}
                                 className="rounded-xl border px-3 py-2 text-xs font-medium text-slate-700 hover:bg-slate-50"
                               >
                                 {isOpen ? (
@@ -791,6 +899,189 @@ export default function InvestmentToolApp() {
                           <tr className="border-t bg-slate-50">
                             <td colSpan={10} className="px-4 py-4">
                               <div className="grid gap-4 lg:grid-cols-4">
+                                {wokeloSnapshotLoading &&
+                                  expanded === row.company_number && (
+                                    <div className="rounded-2xl border border-dashed bg-white p-4 text-sm text-slate-500 lg:col-span-4">
+                                      Checking for saved Wokelo snapshot...
+                                    </div>
+                                )}
+
+                                {!wokeloSnapshotLoading &&
+                                  wokeloSnapshotCheckedFor === row.company_number &&
+                                  !wokeloSnapshot && (
+                                    <div className="rounded-2xl border border-dashed bg-white p-4 text-sm text-slate-500 lg:col-span-4">
+                                      No saved Wokelo snapshot for this company yet. Use the Wokelo button to generate one.
+                                    </div>
+                                )}
+
+                                {wokeloSnapshot &&
+                                  wokeloSnapshot.companyName === row.company_name && (
+  <div className="rounded-2xl border bg-white p-4 lg:col-span-4">
+  <div className="flex items-start justify-between gap-4">
+    <div>
+      <div className="text-sm font-semibold">Wokelo Snapshot</div>
+      <div className="mt-1 text-xs text-slate-500">
+        Matched as: {wokeloSnapshot.matchedCompany?.name || '—'}
+      </div>
+    </div>
+
+    <button
+      type="button"
+      onClick={() => setWokeloSnapshot(null)}
+      className="rounded-xl border border-slate-300 px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-50"
+    >
+      Close
+    </button>
+  </div>
+
+  <div className="mt-4 rounded-2xl border border-slate-200 bg-slate-50 p-4">
+    <div className="text-xs uppercase tracking-wide text-slate-500">Investment summary</div>
+    <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-slate-700">
+      {makeInvestmentSummary(wokeloSnapshot).map((item) => (
+        <li key={item}>{item}</li>
+      ))}
+    </ul>
+  </div>
+
+  <div className="mt-4 grid gap-3 md:grid-cols-4">
+    <div>
+      <div className="text-xs uppercase tracking-wide text-slate-500">Founded</div>
+      <div className="mt-1 font-semibold">
+        {wokeloSnapshot.result?.data?.firmographics?.founded || '—'}
+      </div>
+    </div>
+
+    <div>
+      <div className="text-xs uppercase tracking-wide text-slate-500">Location</div>
+      <div className="mt-1">
+        {wokeloSnapshot.result?.data?.firmographics?.location || '—'}
+      </div>
+    </div>
+
+    <div>
+      <div className="text-xs uppercase tracking-wide text-slate-500">Employees</div>
+      <div className="mt-1 font-semibold">
+        {formatNumber(
+          wokeloSnapshot.result?.data?.headcount?.linkedin_insights?.totalEmployees ||
+            wokeloSnapshot.result?.data?.headcount?.employees_linkedin ||
+            wokeloSnapshot.result?.data?.headcount?.employees_crunchbase
+        )}
+      </div>
+    </div>
+
+    <div>
+      <div className="text-xs uppercase tracking-wide text-slate-500">Funding stage</div>
+      <div className="mt-1">
+        {wokeloSnapshot.result?.data?.funding?.overall?.funding_stage || '—'}
+      </div>
+    </div>
+  </div>
+
+  <div className="mt-5 grid gap-4 md:grid-cols-3">
+    <div className="rounded-2xl border p-4">
+      <div className="text-sm font-semibold">Funding</div>
+      <div className="mt-3 space-y-1 text-sm text-slate-700">
+        <div>Total funding: {formatMoney(wokeloSnapshot.result?.data?.funding?.overall?.total_funding)}</div>
+        <div>Last funding: {formatDate(wokeloSnapshot.result?.data?.funding?.overall?.last_funding_date || null)}</div>
+        <div>Rounds: {wokeloSnapshot.result?.data?.funding?.overall?.num_funding_rounds || '—'}</div>
+      </div>
+    </div>
+
+    <div className="rounded-2xl border p-4">
+      <div className="text-sm font-semibold">Headcount growth</div>
+      <div className="mt-3 space-y-1 text-sm text-slate-700">
+        {(wokeloSnapshot.result?.data?.headcount?.linkedin_insights?.growth_periods || []).map((g: any) => (
+          <div key={g.monthDifferenceStr}>
+            {g.monthDifferenceStr}: {g.changePercentageStr || '—'}
+          </div>
+        ))}
+      </div>
+    </div>
+
+    <div className="rounded-2xl border p-4">
+      <div className="text-sm font-semibold">Website traffic</div>
+      <div className="mt-3 space-y-1 text-sm text-slate-700">
+        <div>
+          Monthly visits: {formatNumber(wokeloSnapshot.result?.data?.website_traffic?.Engagements?.Visits)}
+        </div>
+        <div>
+          Latest growth: {latestTrafficGrowth(wokeloSnapshot.result?.data?.website_traffic)}
+        </div>
+        <div>
+          Pages / visit: {wokeloSnapshot.result?.data?.website_traffic?.Engagements?.PagePerVisit
+            ? Number(wokeloSnapshot.result.data.website_traffic.Engagements.PagePerVisit).toFixed(1)
+            : '—'}
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div className="mt-5 grid gap-4 md:grid-cols-2">
+    <div className="rounded-2xl border p-4">
+      <div className="text-sm font-semibold">Investors</div>
+      <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-slate-700">
+        {(wokeloSnapshot.result?.data?.funding?.key_investors || []).slice(0, 8).map((investor: any) => (
+          <li key={investor.name}>{investor.name}</li>
+        ))}
+      </ul>
+    </div>
+
+    <div className="rounded-2xl border p-4">
+      <div className="text-sm font-semibold">Team composition</div>
+      <ul className="mt-2 list-disc space-y-1 pl-4 text-sm text-slate-700">
+        {(wokeloSnapshot.result?.data?.headcount?.linkedin_insights?.employees_breakup_by_function || [])
+          .slice(0, 8)
+          .map((fn: any) => (
+            <li key={fn.name}>
+              {fn.name}: {fn.percentage}% ({formatNumber(fn.employeeCount)})
+            </li>
+          ))}
+      </ul>
+    </div>
+  </div>
+
+  <div className="mt-5 grid gap-4 md:grid-cols-2">
+    <div className="rounded-2xl border p-4">
+      <div className="text-sm font-semibold">Technology</div>
+      <div className="mt-2 flex flex-wrap gap-1.5">
+        {(wokeloSnapshot.result?.data?.gtm_and_business_model?.technology || []).map((item: string) => (
+          <span key={item} className={`${badgeClass} border-slate-300 bg-slate-50 text-slate-700`}>
+            {item}
+          </span>
+        ))}
+      </div>
+    </div>
+
+    <div className="rounded-2xl border p-4">
+      <div className="text-sm font-semibold">Commercial model</div>
+      <div className="mt-2 text-sm text-slate-700">
+        <div>Model: {wokeloSnapshot.result?.data?.gtm_and_business_model?.business_model_classification || '—'}</div>
+        <div className="mt-2">Customers:</div>
+        <ul className="list-disc pl-4">
+          {(wokeloSnapshot.result?.data?.gtm_and_business_model?.customer_segments || []).map((item: string) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+        <div className="mt-2">Revenue:</div>
+        <ul className="list-disc pl-4">
+          {(wokeloSnapshot.result?.data?.gtm_and_business_model?.revenue_streams || []).map((item: string) => (
+            <li key={item}>{item}</li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  </div>
+
+  <div className="mt-5 rounded-2xl border p-4">
+    <div className="text-sm font-semibold">Description</div>
+    <p className="mt-2 text-sm text-slate-700">
+      {wokeloSnapshot.result?.data?.firmographics?.long_description ||
+        wokeloSnapshot.result?.data?.firmographics?.short_description ||
+        'No description returned.'}
+    </p>
+  </div>
+</div>
+)}
                                 <div className="rounded-2xl border bg-white p-4">
                                   <div className="text-sm font-semibold">Scores</div>
                                   <div className="mt-3 space-y-4 text-sm text-slate-700">
