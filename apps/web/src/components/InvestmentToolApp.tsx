@@ -239,6 +239,27 @@ export default function InvestmentToolApp() {
     setter(current.includes(value) ? current.filter((x) => x !== value) : [...current, value]);
   }
 
+  function sortByColumn(key: SortKey) {
+  const nextDir: SortDir =
+    sortKey === key && sortDir === 'asc' ? 'desc' : 'asc';
+
+  setSortKey(key);
+  setSortDir(nextDir);
+  setSortKeyDraft(key);
+  setSortDirDraft(nextDir);
+
+  loadData({
+    q: query,
+    stages: selectedStages,
+    hubs: selectedHubs,
+    categories: selectedCategories,
+    validatedOnly,
+    ageMonths,
+    sortKey: key,
+    sortDir: nextDir,
+  });
+}
+
   function applyFilters() {
     setQuery(queryInput);
     setSelectedStages(selectedStagesDraft);
@@ -527,15 +548,34 @@ export default function InvestmentToolApp() {
               <table className="min-w-full text-sm">
                 <thead className="bg-slate-50 text-left text-slate-600">
                   <tr>
-                    <th className="px-4 py-3 font-medium">Rank</th>
-                    <th className="px-4 py-3 font-medium">Company</th>
-                    <th className="px-4 py-3 font-medium">Incorporated</th>
+                    {[
+                      ['Rank', 'rank_position'],
+                      ['Company', 'company_name'],
+                      ['Incorporated', 'date_of_creation'],
+                      ['Combined', 'combined_score'],
+                      ['Core', 'core_score'],
+                      ['Alignment', 'alignment_score'],
+                    ].map(([label, key]) => (
+                      <th key={key} className="px-4 py-3 font-medium">
+                        <button
+                          type="button"
+                          onClick={() => sortByColumn(key as SortKey)}
+                          className="inline-flex items-center gap-1 cursor-pointer hover:text-slate-900"
+                        >
+                          {label}
+                          {sortKey === key ? (
+                            sortDir === 'asc' ? (
+                              <ChevronUp className="h-3.5 w-3.5" />
+                            ) : (
+                              <ChevronDown className="h-3.5 w-3.5" />
+                            )
+                          ) : null}
+                        </button>
+                      </th>
+                    ))}
                     <th className="px-4 py-3 font-medium">Hub</th>
                     <th className="px-4 py-3 font-medium">Sectors</th>
                     <th className="px-4 py-3 font-medium">Stage</th>
-                    <th className="px-4 py-3 font-medium">Combined</th>
-                    <th className="px-4 py-3 font-medium">Core</th>
-                    <th className="px-4 py-3 font-medium">Alignment</th>
                     <th className="px-4 py-3 font-medium"></th>
                   </tr>
                 </thead>
