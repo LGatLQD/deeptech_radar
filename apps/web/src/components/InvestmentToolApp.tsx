@@ -60,6 +60,8 @@ type SortKey =
 
 type SortDir = 'asc' | 'desc';
 
+type AgeFilter = 'all' | '3' | '6' | '12' | '24' | '36' | '60';
+
 const badgeClass =
   'inline-flex items-center rounded-full border px-2 py-0.5 text-xs font-medium';
 
@@ -103,6 +105,7 @@ export default function InvestmentToolApp() {
   const [selectedHubsDraft, setSelectedHubsDraft] = useState<string[]>([]);
   const [selectedCategoriesDraft, setSelectedCategoriesDraft] = useState<string[]>([]);
   const [validatedOnlyDraft, setValidatedOnlyDraft] = useState(false);
+  const [ageMonthsDraft, setAgeMonthsDraft] = useState<AgeFilter>('all');
   const [sortKeyDraft, setSortKeyDraft] = useState<SortKey>('rank_position');
   const [sortDirDraft, setSortDirDraft] = useState<SortDir>('asc');
 
@@ -111,6 +114,7 @@ export default function InvestmentToolApp() {
   const [selectedHubs, setSelectedHubs] = useState<string[]>([]);
   const [selectedCategories, setSelectedCategories] = useState<string[]>([]);
   const [validatedOnly, setValidatedOnly] = useState(false);
+  const [ageMonths, setAgeMonths] = useState<AgeFilter>('all');
   const [sortKey, setSortKey] = useState<SortKey>('rank_position');
   const [sortDir, setSortDir] = useState<SortDir>('asc');
 
@@ -170,6 +174,7 @@ export default function InvestmentToolApp() {
     hubs?: string[];
     categories?: string[];
     validatedOnly?: boolean;
+    ageMonths?: AgeFilter;
     sortKey?: SortKey;
     sortDir?: SortDir;
   }) {
@@ -184,6 +189,7 @@ export default function InvestmentToolApp() {
       const hubValues = args?.hubs ?? selectedHubs;
       const categoryValues = args?.categories ?? selectedCategories;
       const validated = args?.validatedOnly ?? validatedOnly;
+      const age = args?.ageMonths ?? ageMonths;
       const sortBy = args?.sortKey ?? sortKey;
       const direction = args?.sortDir ?? sortDir;
 
@@ -192,6 +198,7 @@ export default function InvestmentToolApp() {
       hubValues.forEach((v) => params.append('hub', v));
       categoryValues.forEach((v) => params.append('category', v));
       if (validated) params.set('validated_only', 'true');
+      if (age !== 'all') params.set('age_months', age);
       params.set('sort_key', sortBy);
       params.set('sort_dir', direction);
 
@@ -221,6 +228,7 @@ export default function InvestmentToolApp() {
       hubs: [],
       categories: [],
       validatedOnly: false,
+      ageMonths: 'all',
       sortKey: 'rank_position',
       sortDir: 'asc',
     });
@@ -237,6 +245,7 @@ export default function InvestmentToolApp() {
     setSelectedHubs(selectedHubsDraft);
     setSelectedCategories(selectedCategoriesDraft);
     setValidatedOnly(validatedOnlyDraft);
+    setAgeMonths(ageMonthsDraft);
     setSortKey(sortKeyDraft);
     setSortDir(sortDirDraft);
 
@@ -246,6 +255,7 @@ export default function InvestmentToolApp() {
       hubs: selectedHubsDraft,
       categories: selectedCategoriesDraft,
       validatedOnly: validatedOnlyDraft,
+      ageMonths: ageMonthsDraft,
       sortKey: sortKeyDraft,
       sortDir: sortDirDraft,
     });
@@ -257,6 +267,7 @@ export default function InvestmentToolApp() {
     setSelectedHubsDraft([]);
     setSelectedCategoriesDraft([]);
     setValidatedOnlyDraft(false);
+    setAgeMonthsDraft('all');
     setSortKeyDraft('rank_position');
     setSortDirDraft('asc');
 
@@ -265,6 +276,7 @@ export default function InvestmentToolApp() {
     setSelectedHubs([]);
     setSelectedCategories([]);
     setValidatedOnly(false);
+    setAgeMonths('all');
     setSortKey('rank_position');
     setSortDir('asc');
 
@@ -274,6 +286,7 @@ export default function InvestmentToolApp() {
       hubs: [],
       categories: [],
       validatedOnly: false,
+      ageMonths: 'all',
       sortKey: 'rank_position',
       sortDir: 'asc',
     });
@@ -390,7 +403,7 @@ export default function InvestmentToolApp() {
               />
             </div>
             <div className="mt-2 text-xs text-slate-500">
-              Search runs across the full screened universe and returns the top 300 matches.
+              Search runs across the full screened universe and returns the top 600 matches.
             </div>
           </div>
 
@@ -411,7 +424,7 @@ export default function InvestmentToolApp() {
                   <option value="company_name">Company name</option>
                 </select>
               </div>
-              <div>
+                            <div>
                 <label className="mb-2 block text-sm font-semibold">Direction</label>
                 <select
                   value={sortDirDraft}
@@ -423,6 +436,24 @@ export default function InvestmentToolApp() {
                 </select>
               </div>
             </div>
+
+            <div className="mt-3">
+              <label className="mb-2 block text-sm font-semibold">Incorporation date</label>
+              <select
+                value={ageMonthsDraft}
+                onChange={(e) => setAgeMonthsDraft(e.target.value as AgeFilter)}
+                className="w-full rounded-2xl border border-slate-300 px-3 py-3 text-sm"
+              >
+                <option value="all">All</option>
+                <option value="3">Last 3 months</option>
+                <option value="6">Last 6 months</option>
+                <option value="12">Last 12 months</option>
+                <option value="24">Last 24 months</option>
+                <option value="36">Last 36 months</option>
+                <option value="60">Last 5 years</option>
+              </select>
+            </div>
+
             <label className="mt-3 flex items-center gap-2 text-sm text-slate-700">
               <input
                 type="checkbox"

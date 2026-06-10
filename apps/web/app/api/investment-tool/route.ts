@@ -23,6 +23,7 @@ export async function GET(req: NextRequest) {
     const hub = searchParams.getAll('hub');
     const category = searchParams.getAll('category');
     const validatedOnly = searchParams.get('validated_only') === 'true';
+    const ageMonths = searchParams.get('age_months');
     const sortKey = searchParams.get('sort_key') || 'rank_position';
     const sortDir =
       (searchParams.get('sort_dir') || 'asc').toLowerCase() === 'desc'
@@ -73,6 +74,16 @@ export async function GET(req: NextRequest) {
       conditions.push(`v.cross_ref_promote = true`);
     }
 
+    if (ageMonths && ageMonths !== 'all') {
+      const months = Number(ageMonths);
+
+      if ([3, 6, 12, 24, 36, 60].includes(months)) {
+        conditions.push(`v.date_of_creation >= CURRENT_DATE - ($${i}::int * INTERVAL '1 month')`);
+        values.push(months);
+        i++;
+      }
+    }
+
     const whereClause =
       conditions.length > 0 ? `WHERE ${conditions.join(' AND ')}` : '';
 
@@ -116,7 +127,7 @@ export async function GET(req: NextRequest) {
       LEFT JOIN directors d
         ON r.company_number = d.company_number
       ORDER BY ${orderColumn} ${sortDir}, r.company_name ASC
-      LIMIT 300
+      LIMIT 600
     `;
 
     const countSql = `
