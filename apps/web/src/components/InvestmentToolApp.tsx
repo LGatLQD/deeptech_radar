@@ -126,6 +126,7 @@ export default function InvestmentToolApp() {
   const [binMap, setBinMap] = useState<Record<string, string>>({});
   const [pendingAction, setPendingAction] = useState<{ company_number: string; type: 'watchlist' | 'bin' } | null>(null);
   const [pendingReason, setPendingReason] = useState('');
+  const [wokeloLoading, setWokeloLoading] = useState<string | null>(null);
 
   useEffect(() => {
     async function loadLists() {
@@ -336,6 +337,31 @@ export default function InvestmentToolApp() {
     await fetch('/api/bin', { method: 'DELETE', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ company_number }) });
     setBinMap((prev) => { const next = { ...prev }; delete next[company_number]; return next; });
   }
+
+  async function generateWokeloSnapshot(row: CompanyRow) {
+  try {
+    setWokeloLoading(row.company_number);
+
+    const res = await fetch('/api/wokelo/generate-report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ company: row.company_name }),
+    });
+
+    const data = await res.json();
+
+    if (!res.ok || !data.success) {
+      throw new Error(data.error || `Request failed: ${res.status}`);
+    }
+
+    console.log('Wokelo snapshot', data.result);
+    alert(`Wokelo snapshot generated for ${row.company_name}. Check console for now.`);
+  } catch (err) {
+    alert(err instanceof Error ? err.message : 'Failed to generate Wokelo snapshot');
+  } finally {
+    setWokeloLoading(null);
+  }
+}
 
   function renderFilterGroup(
     title: string,
@@ -641,6 +667,15 @@ export default function InvestmentToolApp() {
                           <td className="px-4 py-3">{scoreCell(row.alignment_score)}</td>
                           <td className="px-4 py-3 text-right">
                             <div className="flex items-center justify-end gap-2">
+                            <button
+                              type="button"
+                              title="Generate Wokelo snapshot"
+                              disabled={wokeloLoading === row.company_number}
+                              onClick={() => generateWokeloSnapshot(row)}
+                              className="rounded-xl border border-slate-200 px-3 py-2 text-xs font-medium text-slate-600 hover:bg-slate-50 disabled:opacity-40"
+                            >
+                              {wokeloLoading === row.company_number ? 'Generating…' : 'Wokelo'}
+                            </button>
                               {/* Watchlist button */}
                               <button
                                 type="button"
